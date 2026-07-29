@@ -55,12 +55,12 @@ app.post('/register', async (req, res) => {
         });
 
         const token = jwt.sign(
-            {
-                userid: user._id,
-                email: user.email
-            },
-            "shhhhhhhhh"
-        );
+        {
+            userid: user._id,
+            email: user.email
+        },
+        process.env.JWT_SECRET
+    );
 
         res.cookie("token", token);
 
@@ -97,13 +97,13 @@ app.post('/login', async (req, res) => {
             return res.send("Invalid Email or Password");
         }
 
-        const token = jwt.sign(
-            {
-                userid: user._id,
-                email: user.email
-            },
-            "shhhhhhhhh"
-        );
+       const token = jwt.sign(
+    {
+        userid: user._id,
+        email: user.email
+    },
+     process.env.JWT_SECRET
+);
 
         res.cookie("token", token);
 
@@ -142,7 +142,7 @@ function isLoggedIn(req, res, next) {
 
     try {
 
-        const data = jwt.verify(req.cookies.token, "shhhhhhhhh");
+        jwt.verify(req.cookies.token, process.env.JWT_SECRET);
 
         req.user = data;
 
